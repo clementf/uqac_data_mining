@@ -14,9 +14,9 @@ twitter.process(searchTerm, processData, writeFile);
 
 function processData(data) {
 	var engagements = [];
-	for (var i in data.statuses) {				
+	for (var i in data) {				
 		//An engagement measure like (2 * retweets + favorites + mentions) / followers		
-		engagements.push((2 * data.statuses[i].retweet_count + data.statuses[i].favorite_count + data.statuses[i].entities.user_mentions.length) / data.statuses[i].user.followers_count);		
+		engagements.push((2 * data[i].retweet_count + data[i].favorite_count + data[i].entities.user_mentions.length) / data[i].user.followers_count);		
 
 	}	
 	medianEng = median(engagements)	
@@ -36,40 +36,40 @@ function writeFile(tt, data) {
 
 	 body = '@data \n';
 
-	for (var i in data.statuses) {		
+	for (var i in data) {		
 		//Popular
-		if((2 * data.statuses[i].retweet_count + data.statuses[i].favorite_count + data.statuses[i].entities.user_mentions.length) / data.statuses[i].user.followers_count > medianEng)
+		if((2 * data[i].retweet_count + data[i].favorite_count + data[i].entities.user_mentions.length) / data[i].user.followers_count > medianEng)
 			body += '1,';
 		else
 			body += '0,';
 
 		//Photo
-		if(data.statuses[i].entities.media && data.statuses[i].entities.media.length > 0)
+		if(data[i].entities.media && data[i].entities.media.length > 0)
 			body += '1,';
 		else
 			body += '0,';
 		
 		//link
-		if(data.statuses[i].entities.urls && data.statuses[i].entities.urls.length > 0)
+		if(data[i].entities.urls && data[i].entities.urls.length > 0)
 			body += '1,';
 		else
 			body += '0,';
 		
 
 		//Hashtag1
-		if(data.statuses[i].entities.hashtags && data.statuses[i].entities.hashtags.length == 0)
+		if(data[i].entities.hashtags && data[i].entities.hashtags.length == 0)
 			body += '1,';
 		else
 			body += '0,';
 		
 		//Hashtag2
-		if(data.statuses[i].entities.hashtags && (data.statuses[i].entities.hashtags.length == 1 || data.statuses[i].entities.hashtags.length == 2 ))
+		if(data[i].entities.hashtags && (data[i].entities.hashtags.length == 1 || data[i].entities.hashtags.length == 2 ))
 			body += '1,';
 		else
 			body += '0,';
 		
 		//Hashtag3
-		if(data.statuses[i].entities.hashtags && data.statuses[i].entities.hashtags.length > 2)
+		if(data[i].entities.hashtags && data[i].entities.hashtags.length > 2)
 			body += '1,';
 		else
 			body += '0,';

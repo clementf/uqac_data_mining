@@ -3,7 +3,7 @@ var twitter = require('./twitter.js');
 
 var DEBUG = false;
 var words = {};
-var searchTerm = '#panamapapers';
+var searchTerm = '#NightShift';
 
 
 twitter.process(searchTerm, false, processData, writeFile);
@@ -15,16 +15,17 @@ function processData(data) {
 		if (DEBUG) {
 			console.log(data[i].text);
 			console.log('\n-----------------------------------\n');
-		}
-		//replace(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.\#-]*)*\/?$/g, '').
-		var sentence = data[i].text.toLowerCase().replace(/[^\w\s]/g, ' ').split(/\s+/);
+		}		
+		
+		var sentence = data[i].entities.hashtags;
 		for (var j = 0; j < sentence.length; j++) {			
 			//filter length and protocol
-			if (sentence[j].length > 3 && sentence[j] !== 'https' && sentence[j] !== 'http') {
-				if (words[sentence[j]] === undefined)
-					words[sentence[j]] = 1;
+			//console.log(sentence[j]);
+			if (sentence[j].text.toLowerCase().length > 3) {
+				if (words[sentence[j].text.toLowerCase()] === undefined)
+					words[sentence[j].text.toLowerCase()] = 1;
 				else {
-					words[sentence[j]]++;
+					words[sentence[j].text.toLowerCase()]++;
 				}
 			}
 		}
@@ -43,7 +44,7 @@ function writeFile(tt, data) {
 			delete words[i];
 		}
 		else{
-			header += '\n @ATTRIBUTE ' + i + ' {0,1} %length :' + words[i];
+			header += '\n@ATTRIBUTE ' + i + ' {0,1} %length :' + words[i];
 		}
 	}
 	console.log('Length after filtering : ' + Object.keys(words).length)

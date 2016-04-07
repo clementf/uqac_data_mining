@@ -3,10 +3,8 @@ var twitter = require('./twitter.js');
 
 var DEBUG = false;
 var words = {};
-var searchTerm = '#panamapapers';
-
-
-twitter.process(searchTerm, false, processData, writeFile);
+var user = 'waxzce';
+twitter.process(user, true, processData, writeFile);
 
 
 
@@ -36,7 +34,7 @@ function processData(data) {
 }
 
 function writeFile(tt, data) {
-	header = '@RELATION ' + searchTerm + '\n';
+	header = '@RELATION '+ user +' \n';
 	console.log('Length before filtering : ' + Object.keys(words).length)
 	for (var i in words) {		
 		if (words[i] < 20) {			
@@ -65,7 +63,7 @@ function writeFile(tt, data) {
 		body += '\n';
 	}
 
-	fs.writeFile('./data/hashtag/' + tt + '.arff', header + body, function(err) {
+	fs.writeFile('./data/user/' + tt + '.arff', header + body, function(err) {
 		if (err) {
 			return console.log(err);
 		}
