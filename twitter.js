@@ -52,7 +52,7 @@ var getTweets = function(params, processData, writeFile) {
 				params.max_id = tw.search_metadata.max_id;
 				setTimeout(function() {
 					getTweets(params, processData, writeFile);
-				}, 2000)
+				}, 3000)
 			} else {
 				writeJson(params.q, tweets, function() {
 					processData(tweets);
@@ -61,6 +61,12 @@ var getTweets = function(params, processData, writeFile) {
 			}
 		} else {
 			console.log(error);
+			if(tweets.length > 100){
+				writeJson(params.q, tweets, function() {
+					processData(tweets);
+					writeFile(params.q, tweets);
+				});
+			}
 			process.exit(1);
 		}
 	});
@@ -86,6 +92,12 @@ var getUserTweets = function(user, params, processData, writeFile) {
 			}
 		} else {
 			console.log(error);
+			if(tweets.length > 100){
+				writeJson(params.q, tweets, function() {
+					processData(tweets);
+					writeFile(params.q, tweets);
+				});
+			}
 			process.exit(1);
 		}
 	});
